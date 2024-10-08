@@ -2,13 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 // local Imports
-
 const connectDb = require('./db.js');
+const employeeRoutes = require('./controllers/employee.controller');
 
 const app =express();
 
 //Middleware
 app.use(bodyParser.json());
+app.use('/api/employees', employeeRoutes);
 
 
 
