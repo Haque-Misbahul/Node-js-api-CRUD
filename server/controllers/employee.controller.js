@@ -7,18 +7,14 @@ const employeeCrud = generateCrudMethods(Employee);
 const {validateDbId, raiseRecord404Error} = require('../middlewares');
 
 
-router.get('/test', 
-    (req,res,next) => {next()},
-    (req,res) => {res.send('test')}
-)
 
-
-router.get('/',(req,res) => {
+router.get('/',(req,res, next) => {
     employeeCrud.getAll()
     .then(data => res.send(data))
-    .catch(err => console.log(err))
+    .catch(err => next(err))
 })
-router.get('/:id',validateDbId,(req,res) => {
+
+router.get('/:id',validateDbId,(req,res, next) => {
     
         employeeCrud.getById(req.params.id)
             .then(data => {
@@ -27,14 +23,14 @@ router.get('/:id',validateDbId,(req,res) => {
                 else
                     raiseRecord404Error(req,res);
             })
-            .catch(err => console.log(err))
+            .catch(err => next(err))
 })
 
-router.post('/', (req,res) => {
+router.post('/', (req,res, next) => {
     console.log(req.body); 
     employeeCrud.create(req.body)
     .then(data => res.status(201).json(data))
-    .catch(err => console.log(err))
+    .catch(err => next(err))
 })
 
 router.put('./:id', validateDbId, (req,res) => {})

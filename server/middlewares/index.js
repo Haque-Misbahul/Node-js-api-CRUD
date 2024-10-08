@@ -17,6 +17,12 @@ const raiseRecord404Error = (req,res) => {
     })
 }
 
+const errorHandler = (error, req, res, next) => {
+    res.status(500).json({error})
+}
+
 module.exports = {
-    validateDbId, raiseRecord404Error
+    validateDbId, 
+    raiseRecord404Error,
+    errorHandler
 }
