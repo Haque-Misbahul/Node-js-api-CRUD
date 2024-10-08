@@ -27,7 +27,6 @@ router.get('/:id',validateDbId,(req,res, next) => {
 })
 
 router.post('/', (req,res, next) => {
-    console.log(req.body); 
     employeeCrud.create(req.body)
     .then(data => res.status(201).json(data))
     .catch(err => next(err))
