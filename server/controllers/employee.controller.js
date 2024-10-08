@@ -9,4 +9,11 @@ router.get('/',(req,res) => {
     .catch(err => console.log(err))
 })
 
+router.post('/', (req,res) => {
+    console.log(req.body); 
+    Employee.create(req.body)
+    .then(data => res.send(data))
+    .catch(err => console.log(err))
+})
+
 module.exports = router;
