@@ -1,38 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const ObjectId = require('mongoose').Types.ObjectId;
 
 const Employee = require('../models/employee.model');
+const { generateCrudMethods } = require('../services');
+const employeeCrud = generateCrudMethods(Employee);
+const {validateDbId, raiseRecord404Error} = require('../middlewares');
+
+
+router.get('/test', 
+    (req,res,next) => {next()},
+    (req,res) => {res.send('test')}
+)
+
 
 router.get('/',(req,res) => {
-    Employee.find()
+    employeeCrud.getAll()
     .then(data => res.send(data))
     .catch(err => console.log(err))
 })
-router.get('/:id',(req,res) => {
-    if (ObjectId.isValid(req.params.id) == false)
-        res.status(400).json({
-            error: 'given object is not valid.'
-        })
-
-    else
-        Employee.findById(req.params.id)
+router.get('/:id',validateDbId,(req,res) => {
+    
+        employeeCrud.getById(req.params.id)
             .then(data => {
                 if (data)
                     res.send(data)
                 else
-                    res.status(404).json({
-                        Error: 'No record with given _id : ' + req.params.id
-                    })
+                    raiseRecord404Error(req,res);
             })
             .catch(err => console.log(err))
 })
 
 router.post('/', (req,res) => {
     console.log(req.body); 
-    Employee.create(req.body)
+    employeeCrud.create(req.body)
     .then(data => res.status(201).json(data))
     .catch(err => console.log(err))
 })
+
+router.put('./:id', validateDbId, (req,res) => {})
+
+router.delete('./:id', validateDbId, (req,res) => {})
 
 module.exports = router;
