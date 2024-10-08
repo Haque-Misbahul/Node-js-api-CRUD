@@ -33,7 +33,16 @@ router.post('/', (req,res, next) => {
     .catch(err => next(err))
 })
 
-router.put('./:id', validateDbId, (req,res) => {})
+router.put('./:id', validateDbId, (req,res) => {
+    employeeCrud.update(req.params.id, req.body)
+    .then(data => {
+        if (data)
+            res.send(data)
+        else
+            raiseRecord404Error(req,res);
+    })
+    .catch(err => next(err))
+})
 
 router.delete('./:id', validateDbId, (req,res) => {})
 
